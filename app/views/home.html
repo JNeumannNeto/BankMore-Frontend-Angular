@@ -1,0 +1,75 @@
+<div class="fade-in">
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container text-center">
+            <h1><i class="bi bi-bank"></i> BankMore</h1>
+            <p class="lead">Sua conta digital completa e segura</p>
+            <div class="mt-4" ng-if="!isAuthenticated()">
+                <a href="#!/register" class="btn btn-light btn-lg me-3">
+                    <i class="bi bi-person-plus"></i> Abrir Conta
+                </a>
+                <a href="#!/login" class="btn btn-outline-light btn-lg">
+                    <i class="bi bi-box-arrow-in-right"></i> Fazer Login
+                </a>
+            </div>
+            <div class="mt-4" ng-if="isAuthenticated()">
+                <a href="#!/dashboard" class="btn btn-light btn-lg">
+                    <i class="bi bi-speedometer2"></i> Ir para Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-3 mb-4" ng-repeat="feature in features">
+                <div class="card feature-card">
+                    <div class="card-body">
+                        <i class="{{feature.icon}}"></i>
+                        <h5 class="card-title">{{feature.title}}</h5>
+                        <p class="card-text">{{feature.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="row mt-5" ng-if="!isAuthenticated()">
+            <div class="col-12 text-center">
+                <div class="card">
+                    <div class="card-body py-5">
+                        <h3>Pronto para começar?</h3>
+                        <p class="lead">Abra sua conta digital em poucos minutos</p>
+                        <a href="#!/register" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-plus"></i> Criar Conta Gratuita
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authenticated User Section -->
+        <div class="row mt-5" ng-if="isAuthenticated()">
+            <div class="col-12 text-center">
+                <div class="card">
+                    <div class="card-body py-5">
+                        <h3>Bem-vindo de volta!</h3>
+                        <p class="lead">Acesse suas funcionalidades bancárias</p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="#!/dashboard" class="btn btn-primary">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                            <a href="#!/transfer" class="btn btn-success">
+                                <i class="bi bi-arrow-left-right"></i> Transferir
+                            </a>
+                            <a href="#!/fees" class="btn btn-info">
+                                <i class="bi bi-receipt"></i> Tarifas
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

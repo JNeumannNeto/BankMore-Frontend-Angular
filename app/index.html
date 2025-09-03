@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR" ng-app="bankMoreApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BankMore - Sistema Bancário</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary" ng-controller="NavController">
+        <div class="container">
+            <a class="navbar-brand" href="#!/">
+                <i class="bi bi-bank"></i> BankMore
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item" ng-if="isAuthenticated()">
+                        <a class="nav-link" href="#!/dashboard">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item" ng-if="isAuthenticated()">
+                        <a class="nav-link" href="#!/transfer">
+                            <i class="bi bi-arrow-left-right"></i> Transferência
+                        </a>
+                    </li>
+                    <li class="nav-item" ng-if="isAuthenticated()">
+                        <a class="nav-link" href="#!/fees">
+                            <i class="bi bi-receipt"></i> Tarifas
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item" ng-if="!isAuthenticated()">
+                        <a class="nav-link" href="#!/login">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item" ng-if="!isAuthenticated()">
+                        <a class="nav-link" href="#!/register">
+                            <i class="bi bi-person-plus"></i> Cadastrar
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown" ng-if="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> Conta
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#!/profile">
+                                <i class="bi bi-person"></i> Perfil
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" ng-click="logout()">
+                                <i class="bi bi-box-arrow-right"></i> Sair
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mt-4">
+        <div ng-view></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light mt-5 py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 BankMore. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/angular@1.8.3/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/angular-route@1.8.3/angular-route.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/angular-animate@1.8.3/angular-animate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/services/authService.js"></script>
+    <script src="js/services/accountService.js"></script>
+    <script src="js/services/transferService.js"></script>
+    <script src="js/services/feeService.js"></script>
+    <script src="js/controllers/navController.js"></script>
+    <script src="js/controllers/homeController.js"></script>
+    <script src="js/controllers/loginController.js"></script>
+    <script src="js/controllers/registerController.js"></script>
+    <script src="js/controllers/dashboardController.js"></script>
+    <script src="js/controllers/transferController.js"></script>
+    <script src="js/controllers/feeController.js"></script>
+    <script src="js/controllers/profileController.js"></script>
+</body>
+</html>

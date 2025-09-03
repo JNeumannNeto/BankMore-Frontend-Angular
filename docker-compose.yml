@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  bankmore-frontend-angular:
+    build: .
+    container_name: bankmore-frontend-angular
+    ports:
+      - "8080:80"
+    depends_on:
+      - bankmore-account-api
+      - bankmore-transfer-api
+      - bankmore-fee-api
+    networks:
+      - bankmore-network
+    restart: unless-stopped
+
+  # Backend services (assuming they exist)
+  bankmore-account-api:
+    image: bankmore-account-api:latest
+    container_name: bankmore-account-api
+    ports:
+      - "54850:80"
+    networks:
+      - bankmore-network
+    restart: unless-stopped
+
+  bankmore-transfer-api:
+    image: bankmore-transfer-api:latest
+    container_name: bankmore-transfer-api
+    ports:
+      - "54849:80"
+    networks:
+      - bankmore-network
+    restart: unless-stopped
+
+  bankmore-fee-api:
+    image: bankmore-fee-api:latest
+    container_name: bankmore-fee-api
+    ports:
+      - "62483:80"
+    networks:
+      - bankmore-network
+    restart: unless-stopped
+
+networks:
+  bankmore-network:
+    driver: bridge

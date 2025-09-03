@@ -1,0 +1,88 @@
+<div class="fade-in">
+    <div class="login-card">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4><i class="bi bi-box-arrow-in-right"></i> Login</h4>
+            </div>
+            <div class="card-body">
+                <form name="loginForm" ng-submit="login()" novalidate>
+                    <!-- Login Type Selection -->
+                    <div class="mb-3">
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="loginType" id="accountType" 
+                                   ng-model="loginType" value="account" ng-change="setLoginType('account')">
+                            <label class="btn btn-outline-primary" for="accountType">
+                                <i class="bi bi-credit-card"></i> Conta
+                            </label>
+
+                            <input type="radio" class="btn-check" name="loginType" id="cpfType" 
+                                   ng-model="loginType" value="cpf" ng-change="setLoginType('cpf')">
+                            <label class="btn btn-outline-primary" for="cpfType">
+                                <i class="bi bi-person-vcard"></i> CPF
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Account Number Field -->
+                    <div class="mb-3" ng-if="loginType === 'account'">
+                        <label for="accountNumber" class="form-label">Número da Conta</label>
+                        <input type="text" class="form-control" id="accountNumber" 
+                               ng-model="loginData.accountNumber" 
+                               placeholder="Digite o número da conta"
+                               required ng-focus="clearMessages()">
+                        <div class="invalid-feedback" ng-show="loginForm.accountNumber.$invalid && loginForm.accountNumber.$touched">
+                            Número da conta é obrigatório
+                        </div>
+                    </div>
+
+                    <!-- CPF Field -->
+                    <div class="mb-3" ng-if="loginType === 'cpf'">
+                        <label for="cpf" class="form-label">CPF</label>
+                        <input type="text" class="form-control" id="cpf" 
+                               ng-model="loginData.cpf" 
+                               placeholder="000.000.000-00"
+                               maxlength="14"
+                               ng-change="formatCpf()"
+                               required ng-focus="clearMessages()">
+                        <div class="invalid-feedback" ng-show="loginForm.cpf.$invalid && loginForm.cpf.$touched">
+                            CPF é obrigatório
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="password" 
+                               ng-model="loginData.password" 
+                               placeholder="Digite sua senha"
+                               required ng-focus="clearMessages()">
+                        <div class="invalid-feedback" ng-show="loginForm.password.$invalid && loginForm.password.$touched">
+                            Senha é obrigatória
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div class="alert alert-danger" ng-show="error">
+                        <i class="bi bi-exclamation-triangle"></i> {{error}}
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary w-100" ng-disabled="loading">
+                        <span ng-if="loading" class="loading-spinner"></span>
+                        <i class="bi bi-box-arrow-in-right" ng-if="!loading"></i>
+                        {{loading ? 'Entrando...' : 'Entrar'}}
+                    </button>
+                </form>
+
+                <hr>
+                
+                <div class="text-center">
+                    <p class="mb-0">Não tem uma conta?</p>
+                    <a href="#!/register" class="btn btn-link">
+                        <i class="bi bi-person-plus"></i> Criar conta gratuita
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

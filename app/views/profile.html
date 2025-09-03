@@ -1,0 +1,193 @@
+<div class="fade-in">
+    <div class="row">
+        <div class="col-12">
+            <h2><i class="bi bi-person-circle"></i> Perfil</h2>
+            <p class="text-muted">Gerencie sua conta e informações pessoais</p>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div ng-if="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Carregando...</span>
+        </div>
+        <p class="mt-3">Carregando dados do perfil...</p>
+    </div>
+
+    <!-- Error State -->
+    <div ng-if="error && !loading" class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle"></i> {{error}}
+    </div>
+
+    <!-- Profile Content -->
+    <div ng-if="!loading && !error && user">
+        <!-- Account Information -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-info-circle"></i> Informações da Conta
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Número da Conta</label>
+                                <div class="form-control-plaintext">
+                                    {{formatAccountNumber(user.accountNumber)}}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Saldo Atual</label>
+                                <div class="form-control-plaintext">
+                                    <span class="h5" ng-class="user.balance >= 0 ? 'text-success' : 'text-danger'">
+                                        {{formatCurrency(user.balance)}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-gear"></i> Ações da Conta
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="d-grid">
+                                    <a href="#!/transfer" class="btn btn-success">
+                                        <i class="bi bi-arrow-left-right"></i> Fazer Transferência
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-grid">
+                                    <a href="#!/fees" class="btn btn-info">
+                                        <i class="bi bi-receipt"></i> Ver Tarifas
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-grid">
+                                    <a href="#!/dashboard" class="btn btn-primary">
+                                        <i class="bi bi-speedometer2"></i> Dashboard
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-warning">
+                    <div class="card-header bg-warning bg-opacity-10">
+                        <h5 class="mb-0 text-warning">
+                            <i class="bi bi-shield-exclamation"></i> Segurança
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Dicas de Segurança</h6>
+                        <ul class="mb-3">
+                            <li>Nunca compartilhe sua senha com terceiros</li>
+                            <li>Sempre faça logout ao usar computadores públicos</li>
+                            <li>Verifique regularmente suas movimentações</li>
+                            <li>Entre em contato conosco em caso de atividade suspeita</li>
+                        </ul>
+                        
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i>
+                            <strong>Importante:</strong> Mantenha seus dados sempre atualizados para garantir a segurança da sua conta.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-danger">
+                    <div class="card-header bg-danger bg-opacity-10">
+                        <h5 class="mb-0 text-danger">
+                            <i class="bi bi-exclamation-triangle"></i> Zona de Perigo
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">
+                            Ações irreversíveis que afetam permanentemente sua conta.
+                        </p>
+                        
+                        <!-- Deactivate Account Button -->
+                        <button class="btn btn-outline-danger" ng-click="toggleDeactivateForm()" ng-if="!showDeactivateForm">
+                            <i class="bi bi-x-circle"></i> Desativar Conta
+                        </button>
+
+                        <!-- Deactivate Form -->
+                        <div ng-if="showDeactivateForm" class="mt-3">
+                            <div class="alert alert-warning">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <strong>Atenção!</strong> Esta ação é irreversível. Sua conta será desativada permanentemente.
+                            </div>
+
+                            <form ng-submit="deactivateAccount()">
+                                <div class="mb-3">
+                                    <label for="deactivatePassword" class="form-label">
+                                        Digite sua senha para confirmar:
+                                    </label>
+                                    <input type="password" class="form-control" id="deactivatePassword" 
+                                           ng-model="deactivatePassword" 
+                                           placeholder="Sua senha atual"
+                                           required>
+                                </div>
+
+                                <!-- Success Message -->
+                                <div class="alert alert-success" ng-show="success">
+                                    <i class="bi bi-check-circle"></i> {{success}}
+                                </div>
+
+                                <!-- Error Message -->
+                                <div class="alert alert-danger" ng-show="error">
+                                    <i class="bi bi-exclamation-triangle"></i> {{error}}
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-danger" ng-disabled="deactivating">
+                                        <span ng-if="deactivating" class="loading-spinner"></span>
+                                        <i class="bi bi-x-circle" ng-if="!deactivating"></i>
+                                        {{deactivating ? 'Desativando...' : 'Confirmar Desativação'}}
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" ng-click="cancelDeactivate()">
+                                        <i class="bi bi-x"></i> Cancelar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="#!/dashboard" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Voltar ao Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

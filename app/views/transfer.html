@@ -1,0 +1,154 @@
+<div class="fade-in">
+    <div class="transfer-form">
+        <div class="row">
+            <div class="col-12">
+                <h2><i class="bi bi-arrow-left-right"></i> Transferência</h2>
+                <p class="text-muted">Envie dinheiro para outras contas de forma segura</p>
+            </div>
+        </div>
+
+        <!-- Current Balance -->
+        <div class="row mb-4" ng-if="currentBalance">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6><i class="bi bi-wallet2"></i> Saldo Disponível</h6>
+                        <h4 class="mb-0">{{formatCurrency(currentBalance.balance)}}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form name="transferForm" ng-submit="transfer()" novalidate>
+                    <!-- Destination Account -->
+                    <div class="mb-3">
+                        <label for="destinationAccount" class="form-label">Conta de Destino</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="destinationAccount" 
+                                   ng-model="transferData.destinationAccountNumber" 
+                                   placeholder="Digite o número da conta"
+                                   ng-change="checkDestinationAccount()"
+                                   ng-focus="clearMessages()"
+                                   required>
+                            <span class="input-group-text" ng-if="checkingAccount">
+                                <div class="spinner-border spinner-border-sm" role="status"></div>
+                            </span>
+                            <span class="input-group-text text-success" ng-if="destinationAccountValid === true">
+                                <i class="bi bi-check-circle"></i>
+                            </span>
+                            <span class="input-group-text text-danger" ng-if="destinationAccountValid === false">
+                                <i class="bi bi-x-circle"></i>
+                            </span>
+                        </div>
+                        <div class="form-text text-success" ng-if="destinationAccountValid === true">
+                            <i class="bi bi-check-circle"></i> Conta encontrada
+                        </div>
+                        <div class="form-text text-danger" ng-if="destinationAccountValid === false">
+                            <i class="bi bi-x-circle"></i> Conta não encontrada
+                        </div>
+                        <div class="invalid-feedback" ng-show="transferForm.destinationAccount.$invalid && transferForm.destinationAccount.$touched">
+                            Número da conta de destino é obrigatório
+                        </div>
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Valor</label>
+                        <div class="input-group">
+                            <span class="input-group-text">R$</span>
+                            <input type="number" class="form-control" id="amount" 
+                                   ng-model="transferData.amount" 
+                                   placeholder="0,00"
+                                   step="0.01"
+                                   min="0.01"
+                                   max="10000"
+                                   ng-blur="formatAmount()"
+                                   ng-focus="clearMessages()"
+                                   required>
+                        </div>
+                        <div class="form-text">Valor máximo: R$ 10.000,00</div>
+                        <div class="invalid-feedback" ng-show="transferForm.amount.$invalid && transferForm.amount.$touched">
+                            <span ng-if="transferForm.amount.$error.required">Valor é obrigatório</span>
+                            <span ng-if="transferForm.amount.$error.min">Valor deve ser maior que zero</span>
+                            <span ng-if="transferForm.amount.$error.max">Valor máximo é R$ 10.000,00</span>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descrição (Opcional)</label>
+                        <input type="text" class="form-control" id="description" 
+                               ng-model="transferData.description" 
+                               placeholder="Ex: Pagamento, Empréstimo, etc."
+                               maxlength="100"
+                               ng-focus="clearMessages()">
+                        <div class="form-text">Máximo 100 caracteres</div>
+                    </div>
+
+                    <!-- Transfer Summary -->
+                    <div class="card bg-light mb-3" ng-if="transferData.amount && destinationAccountValid">
+                        <div class="card-body">
+                            <h6><i class="bi bi-info-circle"></i> Resumo da Transferência</h6>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <strong>Conta Destino:</strong><br>
+                                    {{transferData.destinationAccountNumber}}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Valor:</strong><br>
+                                    {{formatCurrency(transferData.amount)}}
+                                </div>
+                            </div>
+                            <div class="mt-2" ng-if="transferData.description">
+                                <strong>Descrição:</strong> {{transferData.description}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div class="alert alert-success" ng-show="success">
+                        <i class="bi bi-check-circle"></i> {{success}}
+                    </div>
+
+                    <!-- Error Message -->
+                    <div class="alert alert-danger" ng-show="error">
+                        <i class="bi bi-exclamation-triangle"></i> {{error}}
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg" 
+                                ng-disabled="loading || !destinationAccountValid || !transferData.amount">
+                            <span ng-if="loading" class="loading-spinner"></span>
+                            <i class="bi bi-arrow-left-right" ng-if="!loading"></i>
+                            {{loading ? 'Processando...' : 'Confirmar Transferência'}}
+                        </button>
+                        <a href="#!/dashboard" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Voltar ao Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Security Notice -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card border-warning">
+                    <div class="card-body">
+                        <h6 class="text-warning">
+                            <i class="bi bi-shield-exclamation"></i> Importante
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Verifique sempre os dados antes de confirmar a transferência</li>
+                            <li>Transferências são processadas imediatamente e não podem ser canceladas</li>
+                            <li>Mantenha seus dados de acesso seguros</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
